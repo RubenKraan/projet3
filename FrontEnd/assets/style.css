@@ -132,11 +132,25 @@ li:hover {
 	grid-column-gap: 20px;
 	grid-row-gap: 20px;
 }
+.gallery figure {
+	position: relative;
+	overflow: hidden;
+  }
 
 .gallery img {
 	width: 100%;
 
 }
+.gallery figure img {
+	object-fit: cover;
+	object-position: center;
+	height: 505.25px;
+	transition: transform 0.3s ease;
+  }
+  .gallery figure img:hover {
+	transform: scale(1.2);
+  }
+
 #contact {
 	width: 50%;
 margin: auto;
