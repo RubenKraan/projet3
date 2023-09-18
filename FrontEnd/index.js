@@ -119,6 +119,19 @@ function workDisplay() {
         categoryIdValue = "Tous";
         checkToken();
       });
-      
 
+  function checkToken() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      console.log("Token safed, admin");
+      adminEdition();
+    }else { console.log("no token");
+    }
+  }
+      
+function removeToken() {
+  localStorage.removeItem("token");
+}
+
+window.addEventListener("unload", removeToken);
 
