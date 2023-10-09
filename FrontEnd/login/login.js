@@ -9,7 +9,7 @@ const passwordError = document.querySelector(".passwordError");
 submitButton.addEventListener("click", loginUser);
 async function loginUser(e) {
   e.preventDefault()
-  try {
+  try { 
     const logUser = {
       email: inputEmail.value,
       password: inputPassword.value,

@@ -2,7 +2,10 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
+a{
+	color: black;
+	text-decoration: none;
+}
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -66,6 +69,7 @@ h1{
 	display: flex;
 	flex-direction: column;
 	font-family: 'Syne';
+	gap: 3px;
 	font-size: 22px;
 	font-weight: 800;
 	color: #B1663C
