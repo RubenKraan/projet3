@@ -1,3 +1,4 @@
+//dom admin editor
 function adminEdition() {
     adminHTML();
     const modalJs = document.getElementById("titleProjectRemove");
@@ -8,14 +9,16 @@ function adminEdition() {
       openModal();
       editModal();
     });
+    // surpression des travaux de l'api
     const deleteWorksApi = document.querySelector("body > div > button");
     deleteWorksApi.addEventListener("click", (e) => {
       e.preventDefault();
       functionDeleteWorksApi();
     });
   }
-  
+  //autre fonction du mode admin
   function adminHTML() {
+    // creation bandeau
     const flagEditor = document.createElement("div");
     flagEditor.classList.add("flagEditor");
     document
@@ -24,9 +27,11 @@ function adminEdition() {
   
     const spanFlagEditor = document.createElement("span");
     spanFlagEditor.classList.add("projectRemove");
+    //creation span with "i"
     spanFlagEditor.textContent = "Mode édition";
     const iconFlagEditor = document.createElement("i");
     iconFlagEditor.className = "fa-regular fa-pen-to-square";
+    //input I and span 
     spanFlagEditor.insertBefore(iconFlagEditor, spanFlagEditor.firstChild);
   
     const btnFlagEditor = document.createElement("button");
@@ -34,17 +39,24 @@ function adminEdition() {
   
     flagEditor.appendChild(spanFlagEditor);
     flagEditor.appendChild(btnFlagEditor);
+    // clonage du span
+    //span mode edition 
     const figure = document.querySelector("#introduction figure");
     const titleProject = document.querySelector("#portfolio > h2");
     const spanFigure = spanFlagEditor.cloneNode(true);
     const spanTitleProject = spanFlagEditor.cloneNode(true);
     spanTitleProject.classList.remove("projectRemove");
     spanTitleProject.setAttribute("id", "titleProjectRemove");
+    // injection span
     figure.appendChild(spanFigure);
     titleProject.appendChild(spanTitleProject);
+    
+    //login to logout html
+    // selection li element
     const logout = document.querySelector(
       "body > header > nav > ul > li:nth-child(3)"
     );
+    //creation a element to logout
     const logoutLink = document.createElement("a");
     logoutLink.href = "./index.html";
   
@@ -53,21 +65,29 @@ function adminEdition() {
   
     logout.innerHTML = "";
     logout.appendChild(logoutLink);
+    // logout
     logoutLink.addEventListener("click", (event) => {
       event.preventDefault();
       removeToken();
       window.location.assign("./index.html");
     });
     document.body.classList.add("marginTop");
+    // delet filtre search html
     filterButtons.remove();
   };
   function openModal() {
     let deletedImages = {};
+    //prevent doubles
     document.getElementById("modalGrid").innerHTML = "";
+    //injection elements fetch
+    // get image links
+    
     const imagesUrl = [...document.querySelectorAll(".gallery img")].map((img) =>
       img.getAttribute("src")
     );
+    //creation set unique links
     const imagesUrlSet = new Set(imagesUrl);
+    // inejction cartes modal
     const modal = document.createElement("div");
     modal.classList.add("modal");
   
@@ -76,7 +96,7 @@ function adminEdition() {
       const img = document.createElement("img");
       const p = document.createElement("p");
       const iconDelete = document.createElement("i");
-  
+      // add attriubutes data card id
       container.setAttribute("data-card-id", cards[index].id);
       iconDelete.id = "deleteIcon";
       iconDelete.classList.add("fa-solid", "fa-trash-can", "iconModal");
@@ -86,7 +106,7 @@ function adminEdition() {
       container.appendChild(img);
       container.appendChild(p);
       container.appendChild(iconDelete);
-  
+      // add icone 
       if (index === 0) {
         const iconMove = document.createElement("i");
         iconMove.id = "moveIcon";
@@ -97,17 +117,16 @@ function adminEdition() {
         );
         container.appendChild(iconMove);
       }
-  
+      //Delete icon corbeille
       iconDelete.addEventListener("click", async (e) => {
         e.preventDefault();
         const cardDelete = e.target.parentNode.getAttribute("data-card-id");
         removeElement(cardDelete);
         deletedImages[cardDelete] = true;
-        console.log(deletedImages);
         const deletedImagesJSON = JSON.stringify(deletedImages);
         sessionStorage.setItem("deletedImages", deletedImagesJSON);
       });
-  
+      // function delete all
       function removeElement(cardDelete) {
         const card = document.querySelector(`[data-card-id="${cardDelete}"]`);
         if (card && card.parentNode) {
@@ -138,10 +157,11 @@ function adminEdition() {
     galleryMap.append(...imageElements);
   }
   function functionDeleteWorksApi () {
+
     const deletedImagesJSON = sessionStorage.getItem("deletedImages");
     Object.keys(deletedImages).forEach(async (id) => {
       try {
-        if (token === false) return console.log({ error: "Pas connecté" });
+        if (token === false) return console.log("");
   
         const response = await fetch(`${api}works/${id}`, {
           method: "DELETE",
@@ -151,7 +171,7 @@ function adminEdition() {
           },
         });
         if (response.ok) {
-          console.log(`Image avec ID ${id} supprimée`);
+          console.log(``);
         } else {
           throw new Error(response.statusText);
         }
@@ -162,6 +182,7 @@ function adminEdition() {
       }
     });
   };
+  //affichage modal
   function editModal() {
     const addProject = document.getElementById("editModal");
     const inputFile = document.getElementById("filetoUpload");
@@ -182,13 +203,14 @@ function adminEdition() {
       editSection.style.display = "none";
       previewModal.style.display = "none";
     });
+    // img part
     inputFile.addEventListener("change", addPicture);
     if (selectCategory.options.length === 0) {
       const emptyOption = document.createElement("option");
       emptyOption.value = "";
       emptyOption.textContent = "";
       selectCategory.appendChild(emptyOption);
-  
+      // part category
       categories.forEach((category) => {
         const option = document.createElement("option");
         option.textContent = category.name;
@@ -196,6 +218,7 @@ function adminEdition() {
         selectCategory.appendChild(option);
       });
     }
+    // condition post formulaire
     editSection.addEventListener("input", () => {
       const editTitle = document.querySelector("#title");
       const errorImg = document.getElementById("errorImg");
@@ -236,6 +259,7 @@ function adminEdition() {
   
     addToApi.addEventListener("submit", (e) => {
       e.preventDefault();
+      // recup valeur input
       if (iCanSubmit) {
         const image = inputFile.files[0];
         const title = document.querySelector("#title").value;
@@ -263,7 +287,7 @@ function adminEdition() {
             return response.json();
           })
           .then((data) => {
-            console.log("Ta requête POST est passé :) :", data);
+            
             fetchApiWorks();
             workDisplay();
             closeModal();
@@ -271,13 +295,14 @@ function adminEdition() {
           })
           .catch((error) => {
             console.error("Error:", error);
-            console.log("Ta requête POST n'est PAS passée :( ");
+            
           });
       } else {
-        console.log("Formulaire invalide !!!");
+        console.log("");
       }
     });
   }
+  // other function modal
   function disableScroll() {
     document.body.classList.add("modalOpen");
   }
@@ -384,7 +409,7 @@ function adminEdition() {
   
     if (file.size > maxSize) {
       errorImg.textContent = "Votre image est trop volumineuse";
-      console.log("fichier > 4MO!");
+      
       return;
     }
   

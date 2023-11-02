@@ -24,23 +24,16 @@ async function loginUser(e) {
       .then((response) => response.json())
       .then((responseData) => {
         data = responseData;
-        console.log(data);
       });
     if (data.message) {
-      loginError.textContent = "Erreur dans l’identifiant !!";
+      loginError.textContent = "Erreur dans l’identifiant ou mot de passe!";
       inputEmail.style.color = "red";
-      console.log(logUser);
     } else if (data.error) {
-      passwordError.textContent = "Erreur dans le mot de passe !!";
-      loginError.textContent = "";
+      loginError.textContent = "Erreur dans l’identifiant ou mot de passe!";
       inputPassword.style.color = "red";
       inputEmail.style.color = "#1d6154";
-
-      console.log(logUser);
     } else {
       inputPassword.style.color = "#1d6154";
-      console.log("LogAdmin OK");
-      console.log(logUser);
       localStorage.setItem("token", data.token);
       window.location.href = "../index.html";
     }

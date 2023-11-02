@@ -10,15 +10,14 @@ portfolioSection
   .querySelector("h2")
   .insertAdjacentElement("afterend", filterButtons);
 const imageUrls = [];
-
+// fetcher router works
 async function fetchApiWorks() {
   try {
     await fetch(api + "works")
       .then((res) => res.json())
       .then((data) => (cards = data));
     const btnTitle = getButtonTitles(cards);
-    console.log(`le titre des BTN filtres  : ${btnTitle.join("  /  ")}`);
-    console.log(cards);
+    
     filtersBtn(btnTitle);
     workDisplay(cards);
   } catch (error) {
@@ -27,24 +26,24 @@ async function fetchApiWorks() {
     );
   }
 }
-
+//fetcher router categories
 async function fetchApiCategories() {
   try {
     await fetch(api + "categories")
       .then((res) => res.json())
       .then((data) => (categories = data));
-    console.log(categories);
+   
   } catch (error) {
     console.log(
       `Erreur chargement Fonction fetchApiWorks Cartes des Projets:  ${error}`
     );
   }
 }
-
+// get dynamique categories called in fetchApiWorks
 function getButtonTitles(cards) {
   return [...new Set(cards.map((card) => card.category.name))];
 }
-
+// create dynamique buttons called in fetchApiWorks
 function filtersBtn(btnTitle) {
   // Créer le bouton "Tous"
   const allButton = document.createElement("button");
@@ -53,17 +52,7 @@ function filtersBtn(btnTitle) {
   filterButtons.appendChild(allButton);
   filterButtons.classList.add("filter");
 
-  function cardsTemplate(card) {
-    const cardDisplay = document.createElement("figure");
-    cardDisplay.setAttribute("data-card-id", card.id);
-    cardDisplay.setAttribute("value", card.categoryId);
-    const titleCard = document.createElement("figcaption");
-    titleCard.textContent = card.title;
-    cardDisplay.appendChild(imgCard);
-    cardDisplay.appendChild(titleCard);
-    portfolioSection.appendChild(cardDisplay);
-    return cardDisplay;
-  }
+  // Créer les boutons filtres
   const buttons = [
     allButton,
     ...btnTitle.map((categoryName) => {
@@ -73,10 +62,12 @@ function filtersBtn(btnTitle) {
       filterButtons.appendChild(button);
       return button;
     }),
-  ]; buttons.forEach((btn) => {
+  ]; 
+  // Gestionnaire d'événement pour les boutons filtres
+  buttons.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       categoryIdValue = e.target.textContent;
-      console.log(categoryIdValue);
+      
       buttons.forEach((btn) => {
         btn.classList.remove("active");
       });
@@ -85,6 +76,7 @@ function filtersBtn(btnTitle) {
     });
   });
 }
+//creation cards
 function cardsTemplate(card) {
   const cardDisplay = document.createElement("figure");
   cardDisplay.setAttribute("data-card-id", card.id);
@@ -99,7 +91,7 @@ function cardsTemplate(card) {
   portfolioSection.appendChild(cardDisplay);
   return cardDisplay;
 }
-
+//injection des cartes dans le html
 function workDisplay() {
   const gallery = document.querySelector(".gallery");
   const cardDisplay = new Set();
@@ -113,26 +105,25 @@ function workDisplay() {
     gallery.appendChild(cardsTemplate(card));
   });
 }
+//logique chargement de page
 window.addEventListener("load", (e) => {
   fetchApiWorks();
   fetchApiCategories();
   categoryIdValue = "Tous";
   checkToken();
 });
-
+// check token admin 
 function checkToken() {
   const token = localStorage.getItem("token");
   if (token) {
-    console.log("Token safed, admin");
     adminEdition();
   } else {
-    console.log("no token");
+    console.log("");
   }
 }
-
+//log out
 function removeToken() {
   localStorage.removeItem("token");
 }
 
-window.addEventListener("unload", removeToken);
 
